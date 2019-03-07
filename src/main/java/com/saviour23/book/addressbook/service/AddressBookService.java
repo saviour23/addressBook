@@ -18,4 +18,6 @@ public interface AddressBookService {
     Contact getContact(AddressBookType type,String id);
 
     List<Contact> getAllContacts(AddressBookType type);
+
+    List<Contact> findAllContactsByName(String name);
 }

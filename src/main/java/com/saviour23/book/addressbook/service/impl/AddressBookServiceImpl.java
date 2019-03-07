@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class AddressBookServiceImpl implements AddressBookService {
@@ -55,9 +56,20 @@ public class AddressBookServiceImpl implements AddressBookService {
     public List<Contact> getAllContacts(AddressBookType type) {
         List<Contact> allContacts = new ArrayList<>();
         if (null != addressBooks.get(type)) {
-            allContacts.addAll(addressBooks.get(type).getAllContacts()) ;
+            allContacts.addAll(addressBooks.get(type).getAllContacts());
         }
 
         return allContacts;
+    }
+
+    @Override
+    public List<Contact> findAllContactsByName(String name) {
+        List<Contact> allContacts = new ArrayList<>();
+
+        addressBooks.entrySet().stream().forEach(entry -> {
+            allContacts.addAll(entry.getValue().getAllContacts());
+        });
+        List<Contact> allContactsWithNameFiltered = allContacts.stream().filter(contact -> contact.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+        return allContactsWithNameFiltered;
     }
 }

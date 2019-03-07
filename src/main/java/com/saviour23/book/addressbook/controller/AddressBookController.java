@@ -52,4 +52,9 @@ public class AddressBookController {
         bookService.addContact(AddressBookType.CUSTOMER, contact);
         return "Contact name=" + contact.getName() + ", added Successfully";
     }
+
+    @GetMapping(value = "/all/{name}", produces = "application/json")
+    public List<Contact> getAllContactByName(@PathVariable String name) {
+        return bookService.findAllContactsByName(name);
+    }
 }
