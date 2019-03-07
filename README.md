@@ -52,4 +52,10 @@ http://localhost:8080/addressbook/contacts
 
 http://localhost:8080/addressbook/contacts/1
 
+5.**Find ALL AddressBook for Contact by Name**
+
+@GET
+
+http://localhost:8080/addressbook/contacts/all/1
+
 
