@@ -33,20 +33,20 @@ Use **payload** as below:-
         ]
     }
 ```
-2.**get Contact by ID**
+2.**Get Contact by ID**
 
 @GET
 
 http://localhost:8080/addressbook/contacts/1
 
-2.**get All Contacts**
+3.**Get All Contacts**
 
 @GET
 
 http://localhost:8080/addressbook/contacts
 
 
-2.**delete Contact by ID**
+4.**Delete Contact by ID**
 
 @DELETE
 
