@@ -1,5 +1,8 @@
 package com.saviour23.book.addressbook;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saviour23.book.addressbook.model.Contact;
+import com.saviour23.book.addressbook.util.TestDataPopulation;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +27,7 @@ public class AddressBookintegrationTest {
 
     @Test
     public void testGetAllContact() throws Exception {
-        mvc.perform(get("/addressbook/contacts/").
+        mvc.perform(get("/addressbook/all/").
                 contentType(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(status().isOk()).andReturn();
     }
@@ -32,29 +35,21 @@ public class AddressBookintegrationTest {
 
     @Test
     public void testGetContact() throws Exception {
-        mvc.perform(get("/addressbook/contacts/1").
+        mvc.perform(get("/addressbook/Friends").
                 contentType(MediaType.APPLICATION_JSON_VALUE)).
                 andExpect(status().isOk()).andExpect(content().string(Matchers.containsString("Neeraj")));
-    }
-
-    @Test
-    public void testDeleteContact() throws Exception {
-        mvc.perform(delete("/addressbook/contacts/2").
-                contentType(MediaType.APPLICATION_JSON_VALUE)).
-                andExpect(status().isOk()).andReturn();
     }
 
 
     @Test
     public void testAddContact() throws Exception {
-
-        String content = "{\"id\":\"3\",\"name\":\"Neeraj\",\"telephone\":[{\"mobileNumber\":\"12345\"},{\"mobileNumber\":\"123\"}]}";
-        mvc.perform(post("/addressbook/contacts/addcontact").
-                contentType(MediaType.APPLICATION_JSON_VALUE).content(content)).
+        String payload="{\"name\":{\"firstName\":\"Neeraj0\",\"lastName\":\"Negi\"},\"telephone\":[{\"mobileNumber\":\"0123456789\"},{\"mobileNumber\":\"3456723456\"}]}";
+        mvc.perform(post("/addressbook/Friends").
+                contentType(MediaType.APPLICATION_JSON_VALUE).content(payload)).
                 andExpect(status().isOk()).andReturn();
-        mvc.perform(get("/addressbook/contacts/3").
+        mvc.perform(get("/addressbook/Friends").
                 contentType(MediaType.APPLICATION_JSON_VALUE)).
-                andExpect(status().isOk()).andExpect(content().string(Matchers.containsString("Neeraj")));
+                andExpect(status().isOk()).andExpect(content().string(Matchers.containsString("Neeraj0")));
     }
 
 }

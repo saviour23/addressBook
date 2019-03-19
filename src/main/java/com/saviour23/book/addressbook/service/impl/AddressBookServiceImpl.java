@@ -1,75 +1,77 @@
 package com.saviour23.book.addressbook.service.impl;
 
-import com.saviour23.book.addressbook.model.AddressBook;
-import com.saviour23.book.addressbook.model.AddressBookType;
+import com.saviour23.book.addressbook.comparator.NameComparator;
 import com.saviour23.book.addressbook.model.Contact;
 import com.saviour23.book.addressbook.service.AddressBookService;
+import com.saviour23.book.addressbook.service.PersistenceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Service
 public class AddressBookServiceImpl implements AddressBookService {
 
-    private Map<AddressBookType, AddressBook> addressBooks;
+    private Map<String, Set<Contact>> addressBooks;
+    private PersistenceService persistenceService;
 
-
-    public AddressBookServiceImpl() {
+    @Autowired
+    public AddressBookServiceImpl(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
         addressBooks = new ConcurrentHashMap();
+
     }
 
 
+    @PostConstruct
+    public void initializeAddressBook() {
+        this.addressBooks.putAll(this.persistenceService.readAddressBook());
+    }
+
+    @PreDestroy
+    public void savingAddressBookBeforeDestroy() {
+        this.persistenceService.saveAddressBook(this.addressBooks);
+    }
+
     @Override
-    public void addContact(AddressBookType type, Contact contact) {
-        if (null == addressBooks.get(type)) {
-            AddressBook book = new AddressBook();
-            book.addContact(contact);
-            addressBooks.put(type, book);
+    public void addContact(String addressBookName, Contact contact) {
+        if (null == addressBooks.get(addressBookName)) {
+            Set<Contact> contacts = new HashSet<>();
+            contacts.add(contact);
+            addressBooks.put(addressBookName, contacts);
         } else {
-            addressBooks.get(type).addContact(contact);
+            addressBooks.get(addressBookName).add(contact);
         }
+        //Method to save address book.
+        persistenceService.saveAddressBook(addressBooks);
 
     }
 
     @Override
-    public void removeContact(AddressBookType type, String id) {
-
-        if (null != addressBooks.get(type)) {
-            addressBooks.get(type).removeContact(id);
+    public List<Contact> getAllSortedContacts(String addressBookName) {
+        List<Contact> allSortedContacts = new ArrayList<>();
+        if (null != addressBooks.get(addressBookName)) {
+            allSortedContacts.addAll(addressBooks.get(addressBookName));
+            Collections.sort(allSortedContacts, new NameComparator());
         }
+
+        return Collections.unmodifiableList(allSortedContacts);
     }
 
     @Override
-    public Contact getContact(AddressBookType type, String id) {
-        Contact contact = null;
-        if (null != addressBooks.get(type)) {
-            contact = addressBooks.get(type).getContactById(id);
+    public List<Contact> findAllUniqueContacts() {
+        Set<String> addressBookNames = addressBooks.keySet();
+        List<Contact> uniqueContacts = new ArrayList<>();
+        for (String bookName : addressBookNames) {
+            addressBooks.get(bookName).stream().forEach(contact -> {
+                if (!uniqueContacts.contains(contact)) {
+                    uniqueContacts.add(contact);
+                }
+            });
         }
-        return contact;
-    }
-
-    @Override
-    public List<Contact> getAllContacts(AddressBookType type) {
-        List<Contact> allContacts = new ArrayList<>();
-        if (null != addressBooks.get(type)) {
-            allContacts.addAll(addressBooks.get(type).getAllContacts());
-        }
-
-        return allContacts;
-    }
-
-    @Override
-    public List<Contact> findAllContactsByName(String name) {
-        List<Contact> allContacts = new ArrayList<>();
-
-        addressBooks.entrySet().stream().forEach(entry -> {
-            allContacts.addAll(entry.getValue().getAllContacts());
-        });
-        List<Contact> allContactsWithNameFiltered = allContacts.stream().filter(contact -> contact.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-        return allContactsWithNameFiltered;
+        return uniqueContacts;
     }
 }

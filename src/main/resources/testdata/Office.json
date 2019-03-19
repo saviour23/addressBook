@@ -1,0 +1,72 @@
+[
+  {
+    "name": {
+      "firstName": "Neeraj3",
+      "lastName": "Negi"
+    },
+    "telephone": [
+      {
+        "mobileNumber": "0123456789"
+      },
+      {
+        "mobileNumber": "3456723456"
+      }
+    ]
+  },
+  {
+    "name": {
+      "firstName": "Neeraj4",
+      "lastName": "Negi"
+    },
+    "telephone": [
+      {
+        "mobileNumber": "0123456789"
+      },
+      {
+        "mobileNumber": "3456723456"
+      }
+    ]
+  },
+  {
+    "name": {
+      "firstName": "Neeraj5",
+      "lastName": "Negi"
+    },
+    "telephone": [
+      {
+        "mobileNumber": "0123456789"
+      },
+      {
+        "mobileNumber": "3456723456"
+      }
+    ]
+  },
+  {
+    "name": {
+      "firstName": "Neeraj6",
+      "lastName": "Negi"
+    },
+    "telephone": [
+      {
+        "mobileNumber": "0123456789"
+      },
+      {
+        "mobileNumber": "3456723456"
+      }
+    ]
+  },
+  {
+    "name": {
+      "firstName": "Neeraj7",
+      "lastName": "Negi"
+    },
+    "telephone": [
+      {
+        "mobileNumber": "0123456789"
+      },
+      {
+        "mobileNumber": "3456723456"
+      }
+    ]
+  }
+]
