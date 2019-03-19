@@ -12,50 +12,38 @@ Command will start the tomcat server and expose the API's on port _8080_
 
 # Exposed API's
 
-1.**Add Contact**
+1.**To retrieve all contacts for specific AddressBook in sorted order, sorted by FullName.**
+
+@GET
+http://localhost:8080/addressbook/Friends
+
+http://localhost:8080/addressbook/Office
+
+2.**To Retrieve All Unique Contacts in all AddressBooks**
+
+@GET
+
+http://localhost:8080/addressbook/all
+
+3.**To Add Contacts**
 
 @POST
 
-http://localhost:8080/addressbook/contacts/addcontact
-
-Use **payload** as below:-
+http://localhost:8080/addressbook/{addressbookname}
+Payload:
 ```
-{
-        "id": "33",
-        "name": "Neeraj Negi",
-        "telephone": [
-            {
-                "mobileNumber": "12345"
-            },
-            {
-                "mobileNumber": "123"
-            }
-        ]
-    }
+                  {
+		    "name": {
+		      "firstName": "Neeraj10",
+		      "lastName": "Negi"
+		    },
+		    "telephone": [
+		      {
+		        "mobileNumber": "0123456789"
+		      },
+		      {
+		        "mobileNumber": "3456723456"
+		      }
+		    ]
+		  }
 ```
-2.**Get Contact by ID**
-
-@GET
-
-http://localhost:8080/addressbook/contacts/1
-
-3.**Get All Contacts**
-
-@GET
-
-http://localhost:8080/addressbook/contacts
-
-
-4.**Delete Contact by ID**
-
-@DELETE
-
-http://localhost:8080/addressbook/contacts/1
-
-5.**Find ALL AddressBook for Contact by Name**
-
-@GET
-
-http://localhost:8080/addressbook/contacts/all/1
-
-
